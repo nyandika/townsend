@@ -1,10 +1,13 @@
 import { app, BrowserWindow, MenuItemConstructorOptions } from 'electron';
-import { FileService } from './file';
+import { getFiles, getFolder } from './file';
+
+// new instances of the files and folder classes
+const getfile = new getFiles();
+const getfolder  = new getFolder();
 
 // Handle menu ad related items here
 export class MenuBar {
-  public getMenuItemTemplate(browserWIndow: BrowserWindow): MenuItemConstructorOptions[] {
-    const file = new FileService();
+  public getMenuItemTemplate(browserWindow: BrowserWindow): MenuItemConstructorOptions[] {
     const template: MenuItemConstructorOptions[] = [
       {
         label: 'File',
@@ -13,12 +16,15 @@ export class MenuBar {
             label: 'Open Folder',
             accelerator: 'CmdOrCtrl+O',
             click() {
-              file.openFile(browserWIndow);
+              getfolder.openFolder(browserWindow);
             },
           },
           {
             label: 'Open File',
             accelerator: 'CmdOrCtrl+p',
+            click() {
+              getfile.openFile(browserWindow);
+            }
           },
         ],
       },
