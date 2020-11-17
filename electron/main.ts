@@ -1,10 +1,9 @@
-import { app, BrowserWindow, Menu } from 'electron';
-import { initSplashScreen, OfficeTemplate } from 'electron-splashscreen';
-import isDev from 'electron-is-dev';
 import { resolve } from 'app-root-path';
+import { app, BrowserWindow, Menu } from 'electron';
+import isDev from 'electron-is-dev';
+import { initSplashScreen, OfficeTemplate } from 'electron-splashscreen';
 import * as path from 'path';
 import { MenuBar } from './modules/menu';
-import hideSplashscreen from './modules/splashscreen';
 
 function createWindow() {
   const menuBar = new MenuBar();
@@ -14,7 +13,7 @@ function createWindow() {
     height: 900,
     webPreferences: {
       nodeIntegration: true,
-      devTools: false
+      // devTools: true   This is really crucial for debugging, no need to turn it off. To switch between showing the debug tools un/comment line 57
     },
     show: false
   });
@@ -38,7 +37,7 @@ function createWindow() {
   //   hideSplashscreen();
   // });
 
-  mainWindow.webContents.on('did-finish-load', ()=>{
+  mainWindow.webContents.on('did-finish-load', () => {
     mainWindow.show();
     hideSplashscreen();
   });
@@ -55,7 +54,7 @@ function createWindow() {
   mainWindow.loadURL(indexUrl);
 
   // Show devTools at launch: Good for debugging startup
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   const isMac: boolean = process.platform === 'darwin';
 }
