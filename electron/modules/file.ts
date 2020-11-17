@@ -1,4 +1,4 @@
-import { BrowserWindow, dialog } from 'electron';
+import { BrowserWindow, dialog, ipcMain } from 'electron';
 import { promises } from 'fs';
 const fs = require('fs');
 import generateFileTreeObject from './tree';
@@ -17,22 +17,23 @@ export class getFiles {
         },
       ],
     });
-
+ 
     // If there are no files
     if (!files) return;
     console.log(files);
     const directoryString = files[0];
     const fileContent: string = fs.readFileSync(directoryString).toString();
-    console.log(fileContent);
+    // console.log(fileContent);
 
     // send the file contents to the editor
-    const sendCode = () => {
-      if (browserWindow) {
-        browserWindow.webContents.send('fileContent', {
-          message: fileContent,
-        });
+    ipcMain.on('page-load', (event, arg) => {
+      // console.log(fileContent);
+      if(arg == 'true'){
+        arg = fileContent;
+        console.log(arg);
       }
-    };
+      event.sender.send('fileData', arg);
+    });
   }
 }
 
@@ -44,6 +45,6 @@ export class getFolder {
 
     if (!folders) return;
     console.log(folders);
-    generateFileTreeObject(folders);   
+    generateFileTreeObject(folders);
   }
 }

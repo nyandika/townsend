@@ -13,12 +13,12 @@ function createWindow() {
     height: 900,
     webPreferences: {
       nodeIntegration: true,
-      // devTools: true   This is really crucial for debugging, no need to turn it off. To switch between showing the debug tools un/comment line 57
+  
     },
     show: false
   });
 
-
+ 
   const hideSplashscreen = initSplashScreen({
     mainWindow,
     icon: isDev ? resolve('assets/icon.ico') : undefined,
@@ -32,12 +32,7 @@ function createWindow() {
     text: 'Starting ...'
   });
 
-  // mainWindow.once('ready-to-show', () => {
-  //   mainWindow.show();
-  //   hideSplashscreen();
-  // });
-
-  mainWindow.webContents.on('did-finish-load', () => {
+  mainWindow.webContents.on('did-finish-load', ()=>{
     mainWindow.show();
     hideSplashscreen();
   });

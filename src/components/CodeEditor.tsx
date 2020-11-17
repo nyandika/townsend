@@ -22,42 +22,45 @@ const { ipcRenderer } = window.require('electron');
 
 const CodeEditor: React.FC<{}> = (_props) => {
 
-    const [value, setValue] = useState('');
+  const [value, setValue] = useState('');
 
-    const handleResponse = (_event: any, response: any) => {
-        setValue(response.value);
-    };
+  useEffect((): any => {
+    console.log('hello');
+    ipcRenderer.send('page-load', 'true');
+  },[]);
 
-    useEffect((): any => {
-        ipcRenderer.on('fileContent', handleResponse);
-        return () => ipcRenderer.off('fileContent', handleResponse);
-    }, []);
+  useEffect(() => {
+    ipcRenderer.on('fileData', (event, fileContent) => {
+      console.log(fileContent);
+      setValue(fileContent);
+    });
+  }, [value]);
 
-    return (
-        <CodeMirror
-        value={value}
-        options={{
-          theme: 'monokai',
-          mode: 'javascript',
-          lineWrapping: true,
-          smartIndent: true,
-          lineNumbers: true,
-          foldGutter: true,
-          gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
-          autoCloseTags: true,
-          keyMap: 'sublime',
-          matchBrackets: true,
-          autoCloseBrackets: true,
-          extraKeys: {
-            'Ctrl-Space': 'autocomplete'
-          }
-        }}
-        onBeforeChange={(editor, data, value) => {
-          setValue(value);
-        }}
-        onChange={(editor, data, value) => {}}
-      />
-    )
+  return (
+    <CodeMirror
+      value={value}
+      options={{
+        theme: 'monokai',
+        mode: 'javascript',
+        lineWrapping: true,
+        smartIndent: true,
+        lineNumbers: true,
+        foldGutter: true,
+        gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+        autoCloseTags: true,
+        keyMap: 'sublime',
+        matchBrackets: true,
+        autoCloseBrackets: true,
+        extraKeys: {
+          'Ctrl-Space': 'autocomplete'
+        }
+      }}
+      onBeforeChange={(editor, data, value) => {
+        setValue(value);
+      }}
+      onChange={(editor, data, value) => { }}
+    />
+  )
 }
 
 export default CodeEditor
